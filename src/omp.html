@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Open Media Portal</title>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <!--[if IE]>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-history-api/4.2.4/history.min.js"></script>
+        <![endif]-->
+        <script src="./js/riot/riot+compiler.min.js"></script>
+        <script src="./js/omp/omp.js"></script>
+
+        <script   src="http://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
+
+        <link href="./css/omp.css" rel="stylesheet" type="text/css">
+    </head>
+<body>
+	<omp-page id="omp-page" class="omp-page"></omp-page>
+
+    <script type="riot/tag" src="tag/omp-page.tag"></script>
+    <script type="riot/tag" src="tag/omp-navbar.tag"></script>
+    <script type="riot/tag" src="tag/omp-audio.tag"></script>
+    <script type="riot/tag" src="tag/omp-video.tag"></script>
+    <script type="riot/tag" src="tag/omp-image.tag"></script>
+
+    <script>
+        riot.compile(function() {
+            riot.route.base('/');
+            riot.mount('omp-page');
+            riot.route.start(true);
+        });
+    </script>
+</body>
+</html>
