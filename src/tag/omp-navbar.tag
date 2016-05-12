@@ -1,31 +1,31 @@
 /*
  * @author ojourmel
+ *
  */
 <omp-navbar>
 
     <div class="omp-navitemcontainer">
-        <div class="omp-navitem" if={ Object.keys(DATA.library).length == 0 }>
-            <a href="#">No Libraries</a>
-        </div>
+        <a href="/" class="omp-navitem" if={ Object.keys(DATA.library).length == 0 }>
+            <div class="omp-navitem">
+                No Libraries
+            </div>
+        </a>
 
-        <div class="omp-navitem" each={ l in DATA.library }>
-            <a href="/{ l }" class={ selected: parent.selectedlib == l }>{ l }</a>
-        </div>
-    </div>
+        <a href="/{ l }" class="omp-navitem" each={ l in DATA.library }>
+            <div class="{ active: DATA.libkey === l }" >
+                { l }
+            </div>
+        </a>
 
-    <div class="omp-navmenu">
-        <a href="/">Gears</a>
     </div>
+    <a href="/" class="omp-navmenu">
+        <div class="{ active: DATA.libkey == null }">
+            Gears
+        </div>
+    </a>
 
     <script>
         var self = this;
-        var r = riot.route.create();
-        r(highlightCurrent);
-
-        function highlightCurrent(lib) {
-            self.selectedlib = lib;
-            self.update();
-        }
 
         this.on('mount', function() {
             $.ajax({
@@ -36,16 +36,7 @@
                     logger("omp-navbar: " + JSON.stringify(DATA.library));
                     self.update();
 
-                    // Update the routing based on mime providers
-                    for (l in DATA.library) {
-                        var provider = DATA.library[l].libmime;
-                        if (Object.keys(routes).indexOf(provider) == -1) {
-                            provider = routes.notfound;
-                        } else {
-                            provider = routes[provider];
-                        }
-                        r(l,provider);
-                    }
+                    omp.routes.update();
                 },
                 error: function(error){
                      logger("omp-navbar ERROR:");

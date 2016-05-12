@@ -1,13 +1,13 @@
 /*
  * @author ojourmel
  */
-<omp-audio>
+<omp-404>
     <script>
         this.on('mount', function() {
-            logger("omp-audio: mounted at libkey: " + DATA.libkey);
+            logger("omp-404: mounted");
         });
         this.on('unmount', function() {
-            logger('omp-audio: unmounted');
+            logger('omp-404: unmounted');
         });
     </script>
-</omp-audio>
+</omp-404>

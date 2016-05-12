@@ -3,93 +3,118 @@
  */
 <omp-page>
 
-    <omp-navbar id="omp-navbar" class="omp-navbar"></omp-navbar>
+    <omp-navbar class="omp-navbar"></omp-navbar>
 
-    <div if={ home == true }>
-        <span > { welcometext } </span> </br>
-        <span > { updatetext } </span>
-    </div>
-
-    <span if={notfound == true}> Oh No! Something Broke! </span>
-
+    <omp-welcome class="omp-app"></omp-welcome>
     <omp-audio class="omp-app"></omp-audio>
-    <omp-video class="omp-app"></omp-video>
     <omp-image class="omp-app"></omp-image>
+    <omp-video class="omp-app"></omp-video>
+    <omp-404 class="omp-app"></omp-404>
 
     <script>
-        var self = this;
-        app = this;
-
-        self.notfound = false;
-        self.home = true;
-        self.welcometext = "";
-        self.updatetext = "";
+        omp = this;
+        omp.routes = {};
 
         this.on('mount', function() {
-            riot.compile(function() {
-                riot.mount('omp-navbar');
-            });
-            safe_riot_unmount(self.tags, 'omp-audio');
-            safe_riot_unmount(self.tags, 'omp-video');
-            safe_riot_unmount(self.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-welcome');
+            safe_riot_unmount(omp.tags, 'omp-audio');
+            safe_riot_unmount(omp.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-video');
+            safe_riot_unmount(omp.tags, 'omp-404');
             logger('omp-app: mounted');
         });
 
+        omp.routes.home = function (libkey) {
+            DATA.libkey = null;
+            safe_riot_unmount(omp.tags, 'omp-welcome');
+            safe_riot_unmount(omp.tags, 'omp-audio');
+            safe_riot_unmount(omp.tags, 'omp-video');
+            safe_riot_unmount(omp.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-404');
 
-        routes.home = function () {
-            safe_riot_unmount(self.tags, 'omp-audio');
-            safe_riot_unmount(self.tags, 'omp-video');
-            safe_riot_unmount(self.tags, 'omp-image');
-
-            self.update({
-                home: true,
-                notfound: false,
-                welcometext: "Welcome to an OpenMediaPortal!",
-                updatetext: "Early Alpha Release"
-            });
+            safe_riot_mount(omp.tags, 'omp-welcome');
+            omp.update();
         }
-        routes.audio= function () {
-            safe_riot_unmount(self.tags, 'omp-video');
-            safe_riot_unmount(self.tags, 'omp-image');
-            safe_riot_mount(self.tags, 'omp-audio', 'omp-app', 'omp-page');
-            self.update({
-                home: false,
-                notfound: false
-            });
+        omp.routes.audio= function (libkey) {
+            DATA.libkey = libkey;
+            safe_riot_unmount(omp.tags, 'omp-welcome');
+            safe_riot_unmount(omp.tags, 'omp-audio');
+            safe_riot_unmount(omp.tags, 'omp-video');
+            safe_riot_unmount(omp.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-404');
+
+            safe_riot_mount(omp.tags, 'omp-audio');
+            omp.update();
         };
-        routes.video = function () {
-            safe_riot_unmount(self.tags, 'omp-audio');
-            safe_riot_unmount(self.tags, 'omp-image');
-            safe_riot_mount(self.tags, 'omp-video', 'omp-app', 'omp-page');
-            self.update({
-                home: false,
-                notfound: false
-            });
+        omp.routes.video = function (libkey) {
+            DATA.libkey = libkey;
+            safe_riot_unmount(omp.tags, 'omp-welcome');
+            safe_riot_unmount(omp.tags, 'omp-audio');
+            safe_riot_unmount(omp.tags, 'omp-video');
+            safe_riot_unmount(omp.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-404');
+
+            safe_riot_mount(omp.tags, 'omp-video');
+            omp.update();
         };
-        routes.image = function () {
-            safe_riot_unmount(self.tags, 'omp-audio');
-            safe_riot_unmount(self.tags, 'omp-video');
-            safe_riot_mount(self.tags, 'omp-image', 'omp-app', 'omp-page');
-            self.update({
-                home: false,
-                notfound: false
-            });
+        omp.routes.image = function (libkey) {
+            DATA.libkey = libkey;
+            safe_riot_unmount(omp.tags, 'omp-welcome');
+            safe_riot_unmount(omp.tags, 'omp-audio');
+            safe_riot_unmount(omp.tags, 'omp-video');
+            safe_riot_unmount(omp.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-404');
+
+            safe_riot_mount(omp.tags, 'omp-image');
+            omp.update();
         };
-        routes.notfound = function () {
-            safe_riot_unmount(self.tags, 'omp-audio');
-            safe_riot_unmount(self.tags, 'omp-image');
-            safe_riot_unmount(self.tags, 'omp-video');
-            self.update({
-                home: false,
-                notfound: true
-            });
+        omp.routes.notfound = function (libkey) {
+            DATA.libkey = libkey;
+            safe_riot_unmount(omp.tags, 'omp-welcome');
+            safe_riot_unmount(omp.tags, 'omp-audio');
+            safe_riot_unmount(omp.tags, 'omp-video');
+            safe_riot_unmount(omp.tags, 'omp-image');
+            safe_riot_unmount(omp.tags, 'omp-404');
+
+            safe_riot_mount(omp.tags, 'omp-404');
+            omp.update();
         };
 
         var r = riot.route.create();
         // Routing is done dynamically based on the value from DATA.library
         // This is filled in by omp-navbar when the /library ajax request comes back
-        // based on the above implemented routers
-        r('/', routes.home);
-        r(routes.notfound);
+        // based on the above implemented route providers
+        r('/', omp.routes.home);
+        r(omp.routes.notfound);
+
+        // Update routes using the library data in DATA
+        // Due to async issues, a double anonymous function is used
+        // to maintain closure
+        omp.routes.update = function() {
+
+            // Clear current routes
+            riot.route.stop();
+            riot.route.start();
+
+            r('/', omp.routes.home);
+            r(omp.routes.notfound);
+
+            // Look up the mimetype of each library and find the
+            // appropriate routes function
+
+            // Wrap riot route functions to pass libkey
+            for (libkey in DATA.library) {
+                var provider = omp.routes[DATA.library[libkey].libmime];
+                if (provider == null) {
+                    provider = omp.routes.notfound;
+                }
+
+                (function (l, p) {
+                    r(l,function() {
+                        p(l);
+                    });
+                })(libkey,provider);
+            }
+        };
     </script>
 </omp-page>

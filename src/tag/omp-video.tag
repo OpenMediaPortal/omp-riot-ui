@@ -2,23 +2,9 @@
  * @author ojourmel
  */
 <omp-video>
-
-    <div class="omp-sidebar">
-        <p>Sidebar</p>
-    </div>
-
-    <div class="omp-main">
-        <div class="omp-content">
-            <p>Video</p>
-        </div>
-        <div class="omp-controls">
-            Controls
-        </div>
-    </div>
-
     <script>
         this.on('mount', function() {
-            logger('omp-video: mounted');
+            logger("omp-video: mounted at libkey: " + DATA.libkey);
         });
         this.on('unmount', function() {
             logger('omp-video: unmounted');

@@ -2,32 +2,22 @@
 <html>
     <head>
         <title>Open Media Portal</title>
-        <meta http-equiv="X-UA-Compatible" content="IE=edge">
-        <!--[if IE]>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/html5-history-api/4.2.4/history.min.js"></script>
-        <![endif]-->
-        <script src="./js/riot/riot+compiler.min.js"></script>
-        <script src="./js/omp/omp.js"></script>
 
+        <script src="/js/omp/omp.js"></script>
+        <script src="/js/riot/riot.min.js"></script>
         <script   src="http://code.jquery.com/jquery-2.2.3.min.js"   integrity="sha256-a23g1Nt4dtEYOj7bR+vTu7+T8VP13humZFBJNIYoEJo="   crossorigin="anonymous"></script>
 
-        <link href="./css/omp.css" rel="stylesheet" type="text/css">
+        <link href="/css/reset.css" rel="stylesheet" type="text/css">
+        <link href="/css/omp/default.css" rel="stylesheet" type="text/css">
+        <!-- Import riot tags as one concat file -->
+        <script src="/js/omp/tags.js"></script>
     </head>
 <body>
-	<omp-page id="omp-page" class="omp-page"></omp-page>
-
-    <script type="riot/tag" src="tag/omp-page.tag"></script>
-    <script type="riot/tag" src="tag/omp-navbar.tag"></script>
-    <script type="riot/tag" src="tag/omp-audio.tag"></script>
-    <script type="riot/tag" src="tag/omp-video.tag"></script>
-    <script type="riot/tag" src="tag/omp-image.tag"></script>
-
+	<omp-page class="omp-page"></omp-page>
     <script>
-        riot.compile(function() {
-            riot.route.base('/');
-            riot.mount('omp-page');
-            riot.route.start(true);
-        });
+        riot.route.base('/');
+        riot.mount('omp-page')[0];
+        riot.route.start(true);
     </script>
 </body>
 </html>
