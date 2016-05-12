@@ -1,0 +1,21 @@
+{
+  "name": "omp-riot-ui",
+  "description": "A Riot implementation of the Open Media Portal API",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "gulp": "3.9.x",
+    "gulp-clean": "0.3.x",
+    "gulp-clean-css": "2.0.x",
+    "gulp-concat": "2.6.x",
+    "gulp-riot": "^0.5.0",
+    "gulp-sass": "2.2.x",
+    "gulp-uglify": "1.5.x",
+    "gulp-util": "3.0.x",
+    "riot": "2.3.x"
+  },
+  "scripts": {
+    "start": "./node_modules/gulp/bin/gulp.js",
+    "automate": "./node_modules/gulp/bin/gulp.js automate"
+  }
+}

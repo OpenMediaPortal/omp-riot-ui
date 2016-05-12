@@ -1,0 +1,98 @@
+/*
+ * @author ojourmel
+ *
+ */
+
+/* ***** Configurable Variables ***** */
+$font-stack: 600 18px/28px "Open Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Sans-Serif;
+$margin: 0.20em;
+
+/* ***** Global Dispay options ***** */
+html, body, .omp-page {
+  padding:0;
+  margin:0;
+  height:100%;
+  width:100%;
+}
+
+a {
+  color: #eee;
+}
+
+/*
+ *  ##############################################
+ *
+ * Mobile First CSS
+ *
+ * ###############################################
+*/
+
+/* ***** Page and container definition ***** */
+omp-page {
+  font: $font-stack;
+  background: #605D66;
+  display: flex;
+  flex-direction:column;
+}
+
+/* ***** Navbar container and items ***** */
+omp-navbar {
+  margin: $margin;
+  margin-bottom: 0;
+  display: flex;
+  flex-direction: row;
+
+  background: #6B7382; /* Old browsers */
+  background: -moz-linear-gradient(45deg, #6b7382 0%, #9297a8 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, #6b7382 0%,#9297a8 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, #6b7382 0%,#9297a8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6b7382', endColorstr='#9297a8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.omp-navitemcontainer {
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  flex-grow: 1;
+}
+
+.omp-navmenu {
+  background: #000000;
+  background:rgba(0,0,0,0.5);
+  float: right;
+  margin-top: $margin;
+  margin-right: $margin;
+  margin-bottom: $margin;
+  margin-left: $margin;
+  padding: 0px;
+  text-align: center;
+  color: #fff;
+  min-width: 25px;
+  min-height: 25px;
+}
+.omp-navmenu:hover {
+  background:rgba(0,0,0,0.85);
+}
+.omp-navmenu .active {
+  background:rgba(0,0,0,0.75);
+}
+
+.omp-navitem {
+  background: #000000;
+  background:rgba(0,0,0,0.5);
+  margin-top: $margin;
+  margin-right: 0;
+  margin-bottom: $margin;
+  margin-left: $margin;
+  padding: 0px;
+  text-align: center;
+  color: #fff;
+  flex-grow: 1;
+}
+.omp-navitem:hover {
+  background:rgba(0,0,0,0.85);
+}
+.omp-navitem .active {
+  background:rgba(0,0,0,0.75);
+}
