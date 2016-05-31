@@ -12,71 +12,75 @@
     <omp-404 class="omp-app"></omp-404>
 
     <script>
+
+        /*
+         * @see /js/omp/data.js
+         */
         omp = this;
         omp.routes = {};
 
-        this.on('mount', function() {
-            safe_riot_unmount(omp.tags, 'omp-welcome');
-            safe_riot_unmount(omp.tags, 'omp-audio');
-            safe_riot_unmount(omp.tags, 'omp-image');
-            safe_riot_unmount(omp.tags, 'omp-video');
-            safe_riot_unmount(omp.tags, 'omp-404');
-            logger('omp-app: mounted');
+        this.on("mount", function() {
+            safe_riot_unmount(omp.tags, "omp-welcome");
+            safe_riot_unmount(omp.tags, "omp-audio");
+            safe_riot_unmount(omp.tags, "omp-video");
+            safe_riot_unmount(omp.tags, "omp-image");
+            safe_riot_unmount(omp.tags, "omp-404");
+            logger("omp-app: mounted");
         });
 
         omp.routes.home = function (libkey) {
             DATA.libkey = null;
-            safe_riot_unmount(omp.tags, 'omp-welcome');
-            safe_riot_unmount(omp.tags, 'omp-audio');
-            safe_riot_unmount(omp.tags, 'omp-video');
-            safe_riot_unmount(omp.tags, 'omp-image');
-            safe_riot_unmount(omp.tags, 'omp-404');
+            safe_riot_unmount(omp.tags, "omp-welcome");
+            safe_riot_unmount(omp.tags, "omp-audio");
+            safe_riot_unmount(omp.tags, "omp-video");
+            safe_riot_unmount(omp.tags, "omp-image");
+            safe_riot_unmount(omp.tags, "omp-404");
 
-            safe_riot_mount(omp.tags, 'omp-welcome');
+            safe_riot_mount(omp.tags, "omp-welcome");
             omp.update();
         }
         omp.routes.audio= function (libkey) {
             DATA.libkey = libkey;
-            safe_riot_unmount(omp.tags, 'omp-welcome');
-            safe_riot_unmount(omp.tags, 'omp-audio');
-            safe_riot_unmount(omp.tags, 'omp-video');
-            safe_riot_unmount(omp.tags, 'omp-image');
-            safe_riot_unmount(omp.tags, 'omp-404');
+            safe_riot_unmount(omp.tags, "omp-welcome");
+            safe_riot_unmount(omp.tags, "omp-audio");
+            safe_riot_unmount(omp.tags, "omp-video");
+            safe_riot_unmount(omp.tags, "omp-image");
+            safe_riot_unmount(omp.tags, "omp-404");
 
-            safe_riot_mount(omp.tags, 'omp-audio');
+            safe_riot_mount(omp.tags, "omp-audio");
             omp.update();
         };
         omp.routes.video = function (libkey) {
             DATA.libkey = libkey;
-            safe_riot_unmount(omp.tags, 'omp-welcome');
-            safe_riot_unmount(omp.tags, 'omp-audio');
-            safe_riot_unmount(omp.tags, 'omp-video');
-            safe_riot_unmount(omp.tags, 'omp-image');
-            safe_riot_unmount(omp.tags, 'omp-404');
+            safe_riot_unmount(omp.tags, "omp-welcome");
+            safe_riot_unmount(omp.tags, "omp-audio");
+            safe_riot_unmount(omp.tags, "omp-video");
+            safe_riot_unmount(omp.tags, "omp-image");
+            safe_riot_unmount(omp.tags, "omp-404");
 
-            safe_riot_mount(omp.tags, 'omp-video');
+            safe_riot_mount(omp.tags, "omp-video");
             omp.update();
         };
         omp.routes.image = function (libkey) {
             DATA.libkey = libkey;
-            safe_riot_unmount(omp.tags, 'omp-welcome');
-            safe_riot_unmount(omp.tags, 'omp-audio');
-            safe_riot_unmount(omp.tags, 'omp-video');
-            safe_riot_unmount(omp.tags, 'omp-image');
-            safe_riot_unmount(omp.tags, 'omp-404');
+            safe_riot_unmount(omp.tags, "omp-welcome");
+            safe_riot_unmount(omp.tags, "omp-audio");
+            safe_riot_unmount(omp.tags, "omp-video");
+            safe_riot_unmount(omp.tags, "omp-image");
+            safe_riot_unmount(omp.tags, "omp-404");
 
-            safe_riot_mount(omp.tags, 'omp-image');
+            safe_riot_mount(omp.tags, "omp-image");
             omp.update();
         };
         omp.routes.notfound = function (libkey) {
             DATA.libkey = libkey;
-            safe_riot_unmount(omp.tags, 'omp-welcome');
-            safe_riot_unmount(omp.tags, 'omp-audio');
-            safe_riot_unmount(omp.tags, 'omp-video');
-            safe_riot_unmount(omp.tags, 'omp-image');
-            safe_riot_unmount(omp.tags, 'omp-404');
+            safe_riot_unmount(omp.tags, "omp-welcome");
+            safe_riot_unmount(omp.tags, "omp-audio");
+            safe_riot_unmount(omp.tags, "omp-video");
+            safe_riot_unmount(omp.tags, "omp-image");
+            safe_riot_unmount(omp.tags, "omp-404");
 
-            safe_riot_mount(omp.tags, 'omp-404');
+            safe_riot_mount(omp.tags, "omp-404");
             omp.update();
         };
 
@@ -84,7 +88,7 @@
         // Routing is done dynamically based on the value from DATA.library
         // This is filled in by omp-navbar when the /library ajax request comes back
         // based on the above implemented route providers
-        r('/', omp.routes.home);
+        r("/", omp.routes.home);
         r(omp.routes.notfound);
 
         // Update routes using the library data in DATA
@@ -94,9 +98,8 @@
 
             // Clear current routes
             riot.route.stop();
-            riot.route.start();
 
-            r('/', omp.routes.home);
+            r("/", omp.routes.home);
             r(omp.routes.notfound);
 
             // Look up the mimetype of each library and find the
@@ -115,6 +118,14 @@
                     });
                 })(libkey,provider);
             }
+
+            /*
+             * Once all the routes have been put in place, start up the router again.
+             * Passing the boolean value "true" forces an exec on the current ulr
+             * This is very helpful for recovering from a browser refresh
+             * @see http://riotjs.com/api/route/#riotroutestartautoexec
+             */
+            riot.route.start(true);
         };
     </script>
 </omp-page>

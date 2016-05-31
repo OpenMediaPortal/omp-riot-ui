@@ -27,9 +27,9 @@
     <script>
         var self = this;
 
-        this.on('mount', function() {
+        this.on("mount", function() {
             $.ajax({
-                url: DATA.SERVERADDRESS + ":" + DATA.SERVERPORT + "/library",
+                url: DATA.APIBASE + "/library",
                 type: "GET",
                 success: function(data){
                     DATA.library = data;
@@ -43,7 +43,7 @@
                      logger(error);
                 }
             });
-            logger('omp-navbar: mounted');
+            logger("omp-navbar: mounted");
         });
     </script>
 </omp-navbar>

@@ -33,6 +33,13 @@ omp-page {
   background: #605D66;
   display: flex;
   flex-direction:column;
+  overflow-y: scroll;
+  overflow-x: auto;
+}
+
+/* ***** Generic app ***** */
+.omp-app {
+  margin: $margin;
 }
 
 /* ***** Navbar container and items ***** */
@@ -41,12 +48,13 @@ omp-navbar {
   margin-bottom: 0;
   display: flex;
   flex-direction: row;
+  min-height: 2em;
 
   background: #6B7382; /* Old browsers */
   background: -moz-linear-gradient(45deg, #6b7382 0%, #9297a8 100%); /* FF3.6-15 */
   background: -webkit-linear-gradient(45deg, #6b7382 0%,#9297a8 100%); /* Chrome10-25,Safari5.1-6 */
   background: linear-gradient(45deg, #6b7382 0%,#9297a8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#6b7382', endColorstr='#9297a8',GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#6b7382", endColorstr="#9297a8",GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
 }
 
 .omp-navitemcontainer {
@@ -95,4 +103,25 @@ omp-navbar {
 }
 .omp-navitem .active {
   background:rgba(0,0,0,0.75);
+}
+
+.omp-playercontainer {
+  text-align: center;
+}
+.omp-player {
+  text-align: left;
+  margin: auto;
+  display: inline-block;
+}
+
+.omp-file-nav {
+  float: left;
+}
+.omp-file-nav ul > li {
+  list-style-type: circle;
+  list-style-position:inside;
+  margin-left: 10px;
+}
+.omp-file-list {
+  float: right;
 }
