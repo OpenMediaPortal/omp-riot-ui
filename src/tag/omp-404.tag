@@ -3,11 +3,12 @@
  */
 <omp-404>
     <script>
-        this.on('mount', function() {
+        var self = this;
+        this.on("mount", function() {
             logger("omp-404: mounted");
         });
-        this.on('unmount', function() {
-            logger('omp-404: unmounted');
+        this.on("unmount", function() {
+            logger("omp-404: unmounted");
         });
     </script>
 </omp-404>
