@@ -2,6 +2,11 @@
 /*
  * Generic file display utilities
  *
+ * Unfortunate coupling with omp/players.js to modify
+ * playHistory and nowPlaying and whatnot.
+ *
+ * Possible refactoring task to remove this coupling
+ *
  * @author ojourmel
  */
 
@@ -9,6 +14,11 @@ class Files {
 
     constructor(parent) {
         this.parent = parent;
+    };
+
+    init(type) {
+        this.updateFileNav();
+        this.updateFileList(type, null);
     };
 
     initFileNav() {
@@ -41,6 +51,24 @@ class Files {
             nav = nav[0];
         }
 
+        // For usage in the onclick functions
+        var that = this;
+
+        $("<li>", {
+            id: "all",
+            text: "All",
+            class: "hover cursorclick",
+            // Hard code "all" functionality
+            click: function() {
+                that.updateFileList("list", null)
+                players[DATA.libkey].nowPlaying = [[0,DATA.library[DATA.libkey].f.files.length-1]];
+                players[DATA.libkey].playHistory = [];
+                players[DATA.libkey].playHistoryIndex = 0;
+            }
+        }).appendTo(
+            $("<ul>").appendTo(nav)
+        );
+
         // First group gets ul directly on nav
         if (DATA.library[DATA.libkey].f.group.length > 0) {
             var p = $("<ul>", {
@@ -63,12 +91,20 @@ class Files {
                 // Number of contiguous files in item in group
                 for (var n=0; n<DATA.library[DATA.libkey].f.index[g][iname].length; n++) {
 
-                    // HACK: Lookup by class name.
-                    //       Strip non alphanumerics to make value a valid class
-                    var item = $("<li>",{
-                        "class": iname.replace(/[^\w]/g, ""),
+                    // (ab)use the first line of html text on target as a key into the json data
+                    var item = $("<li>", {
+                        "class": iname.replace(/[^\w]/g, "") + " hover cursorclick",
                         text: iname,
-                    });
+                        click: function (e) {
+                                var group = e.target.parentNode.className;
+                                var name = e.target.innerText.split("\n")[0];
+                                that.updateFileList("list", DATA.library[DATA.libkey].f.index[group][name]);
+                                players[DATA.libkey].nowPlaying = DATA.library[DATA.libkey].f.index[group][name];
+                                players[DATA.libkey].playHistory = [];
+                                players[DATA.libkey].playHistoryIndex = 0;
+                                return false;
+                            }
+                        });
 
                     // The last group doesn't get another ul child
                     if (i < DATA.library[DATA.libkey].f.group.length-1) {
@@ -105,7 +141,7 @@ class Files {
                                     (itemend >= paritem[y][0] && itemend <= paritem[y][1]) ||
                                     (itemstart <= paritem[y][0] && itemend >= paritem[y][1])) {
 
-                                    // HACK: Strip non alphanumerics for class search
+                                    // HACK: Strip non alphanumerics for CSS class search
                                     var insert = $("." + parkeys[x].replace(/[^\w]/g, "") + ">ul");
 
                                     // if the parent item appears more than once, use the tuple count (y)
@@ -126,7 +162,6 @@ class Files {
      *  type: list, details, thumbnail, strip, fullscreen (slider)
      *  indexes: [[a,b], [c,d], ..., [x,y]]
      *
-     * @note: indexes is not currently used
      */
     updateFileList(type, indexes) {
         var list = $(".omp-file-list");
@@ -137,25 +172,52 @@ class Files {
         }
 
         if (type === "list") {
+
+            var p = $(".files");
+            if (p.length != 0) {
+                p.remove();
+            }
             var p = $("<ul>", {
                 "class": "files"
             });
             p.appendTo(list);
 
-            for (var i=0; i<DATA.library[DATA.libkey].f.files.length; i++) {
-                var f = DATA.library[DATA.libkey].f.files[i];
+            if (! indexes) {
+                indexes = [[0,DATA.library[DATA.libkey].f.files.length-1]];
+            }
 
-                var display;
-                if ( f.title ) {
-                    display = f.title;
-                } else {
-                    display = f.name;
+            for (var x=0; x<indexes.length; x++) {
+                for (var i=indexes[x][0]; i<=indexes[x][1]; i++) {
+                    if (i<DATA.library[DATA.libkey].f.files.length) {
+                        var f = DATA.library[DATA.libkey].f.files[i];
+
+                        var display;
+                        if ( f.title ) {
+                            display = f.title;
+                        } else {
+                            display = f.name;
+                        }
+
+                        // Clicking a file will trigger a play history update
+                        // Remove "future" play history data with a splice
+                        // Make this new item the most recent played thing.
+                        $("<li>", {
+                            id: f._id,
+                            text: display,
+                            "class": "hover cursorclick",
+                            click: function(id) {
+                                return function () {
+                                    players[DATA.libkey].playHistoryIndex++;
+                                    players[DATA.libkey].playHistory.splice(players[DATA.libkey].playHistoryIndex, players[DATA.libkey].playHistory.length);
+                                    players[DATA.libkey].playHistory.push(id);
+                                    players[DATA.libkey].play(id);
+                                }
+                            }(f._id)
+                        }).appendTo(p);
+                    } else {
+                        logger("files.js: attempted index " + i + " on library " + DATA.libkey + " out of range");
+                    }
                 }
-
-                $("<li>", {
-                    id:f._id,
-                    text: display
-                }).appendTo(p);
             }
         } else {
             logger("files.js: file list type " + type + " is not supported");
