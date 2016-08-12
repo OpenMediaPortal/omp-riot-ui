@@ -24,17 +24,12 @@
                 data: {"group":"artist,album" , "sort":""},
                 success: function(data){
                     DATA.library[DATA.libkey].f = data;
-                    files.updateFileNav();
-                    files.updateFileList("list");
-                    self.update();
-
-                    // Add onClick callback handlers
-                    $( ".omp-file-list li" ).on( "click", function() {
-                        players[DATA.libkey].play($(this).attr("id"));
-                    });
 
                     players[DATA.libkey].init($(".omp-player")[0]);
                     players[DATA.libkey].show();
+
+                    files.init("list");
+                    self.update();
                 },
                 error: function(error){
                      logger("omp-audio/" + DATA.libkey + " ERROR:");
