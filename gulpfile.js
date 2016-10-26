@@ -27,6 +27,12 @@ gulp.task("includes", function() {
         .pipe(gulp.dest(TARGET + "/js/riot/"));
     gulp.src("node_modules/jquery/dist/jquery.min.js")
         .pipe(gulp.dest(TARGET + "/js/jquery/"));
+    gulp.src("node_modules/font-awesome/css/font-awesome.min.css")
+        .pipe(gulp.dest(TARGET + "/css/"));
+    gulp.src("node_modules/font-awesome/css/font-awesome.css.map")
+        .pipe(gulp.dest(TARGET + "/css/"));
+    gulp.src(["node_modules/font-awesome/fonts/**/*"])
+        .pipe(gulp.dest(TARGET + "/fonts/"));
 });
 
 /*
@@ -43,10 +49,10 @@ gulp.task("scripts", function() {
  * Minified seperate css and sass files
  */
 gulp.task("styles", function() {
-    gulp.src(SOURCE + "/css/omp/*.scss")
+    gulp.src(SOURCE + "/css/omp/default.scss")
         .pipe(sass().on("error",utils.log))
         .pipe(env === "development" ? utils.noop() : cleancss().on("error",utils.log))
-        .pipe(gulp.dest(TARGET + "/css/omp"));
+        .pipe(gulp.dest(TARGET + "/css/omp/"));
     gulp.src(SOURCE + "/css/*.css")
         .pipe(env === "development" ? utils.noop() : cleancss().on("error",utils.log))
         .pipe(gulp.dest(TARGET + "/css"));

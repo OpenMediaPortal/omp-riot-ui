@@ -3,7 +3,7 @@
  */
 <omp-page>
 
-    <omp-navbar class="omp-navbar"></omp-navbar>
+    <omp-nav class="omp-nav"></omp-nav>
 
     <omp-welcome class="omp-app"></omp-welcome>
     <omp-audio class="omp-app"></omp-audio>
@@ -38,7 +38,7 @@
 
             safe_riot_mount(omp.tags, "omp-welcome");
             omp.update();
-        }
+        };
         omp.routes.audio= function (libkey) {
             DATA.libkey = libkey;
             safe_riot_unmount(omp.tags, "omp-welcome");
@@ -86,7 +86,7 @@
 
         var r = riot.route.create();
         // Routing is done dynamically based on the value from DATA.library
-        // This is filled in by omp-navbar when the /library ajax request comes back
+        // This is filled in by omp-nav when the /library ajax request comes back
         // based on the above implemented route providers
         r("/", omp.routes.home);
         r(omp.routes.notfound);

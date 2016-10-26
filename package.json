@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "private": true,
   "dependencies": {
+    "font-awesome": "4.7.x",
     "gulp": "3.9.x",
     "gulp-clean": "0.3.x",
     "gulp-clean-css": "2.0.x",

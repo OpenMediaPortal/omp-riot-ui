@@ -1,0 +1,93 @@
+/*
+ * @author ojourmel
+ *
+ */
+@import "global";
+
+/* ***** Nav container and items ***** */
+.omp-nav {
+  display: flex;
+  min-height: 2em;
+
+  margin: $margin;
+  margin-bottom: 0;
+
+  background: #6B7382; /* Old browsers */
+  background: -moz-linear-gradient(45deg, #6B7382 0%, #9297A8 100%); /* FF3.6-15 */
+  background: -webkit-linear-gradient(45deg, #6B7382 0%,#9297A8 100%); /* Chrome10-25,Safari5.1-6 */
+  background: linear-gradient(45deg, #6b7382 0%,#9297A8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#6B7382", endColorstr="#9297A8",GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+}
+
+.omp-nav-items {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.omp-nav-item {
+  height: 0;
+  opacity: 0;
+  visibility: hidden;
+
+  width: 100%;
+
+  text-align: center;
+
+  background: #000000;
+  background:rgba(0,0,0,0.5);
+}
+.omp-nav-item:hover {
+  background:rgba(0,0,0,0.85);
+}
+.omp-nav-item.active, #omp-nav-toggle:checked + .omp-nav-items > .omp-nav-item {
+  margin-top: $margin;
+  height: initial;
+  opacity: 1;
+  visibility: visible;
+}
+.omp-nav-item.active {
+  background:rgba(0,0,0,0.75);
+  order: -1;
+}
+#omp-nav-toggle:checked + .omp-nav-items > .omp-nav-item:last-child {
+  margin-bottom: $margin;
+}
+
+
+#omp-nav-toggle {
+  display: none;
+}
+#omp-nav-home, #omp-nav-toggle-label {
+  color: black;
+  text-align: center;
+  cursor: pointer;
+  display: inline-block;
+
+  width: 28px;
+  height: 28px;
+  margin: $margin;
+  margin-bottom: auto;
+}
+
+@media (min-width: 768px) {
+  .omp-nav-items {
+    flex-direction: row;
+  }
+  .omp-nav-item {
+    margin: $margin;
+    margin-left: 0;
+    height: initial;
+    opacity: 1;
+    visibility: visible;
+
+  }
+  .omp-nav-item.active {
+    order: inherit;
+  }
+
+  #omp-nav-toggle-label {
+    display: none;
+  }
+}
+
