@@ -2,6 +2,7 @@
  * @author ojourmel
  *
  */
+
 @import "global";
 
 /* ***** Nav container and items ***** */
@@ -12,16 +13,12 @@
   margin: $margin;
   margin-bottom: 0;
 
-  background: #6B7382; /* Old browsers */
-  background: -moz-linear-gradient(45deg, #6B7382 0%, #9297A8 100%); /* FF3.6-15 */
-  background: -webkit-linear-gradient(45deg, #6B7382 0%,#9297A8 100%); /* Chrome10-25,Safari5.1-6 */
-  background: linear-gradient(45deg, #6b7382 0%,#9297A8 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr="#6B7382", endColorstr="#9297A8",GradientType=1 ); /* IE6-9 fallback on horizontal gradient */
+  background: $color-accent-light;
 }
 
 .omp-nav-items {
   display: flex;
-  flex-direction: column;
+  flex-flow: column;
   width: 100%;
 }
 
@@ -34,12 +31,17 @@
 
   text-align: center;
 
-  background: #000000;
-  background:rgba(0,0,0,0.5);
+  background: $color-accent-dark;
 }
-.omp-nav-item:hover {
-  background:rgba(0,0,0,0.85);
+.omp-nav-item:active {
+  background:color-dark-hover($color-accent-dark);
 }
+@media (min-width: 768px) {
+  .omp-nav-item:hover {
+    background:color-dark-hover($color-accent-dark);
+  }
+}
+
 .omp-nav-item.active, #omp-nav-toggle:checked + .omp-nav-items > .omp-nav-item {
   margin-top: $margin;
   height: initial;
@@ -47,19 +49,18 @@
   visibility: visible;
 }
 .omp-nav-item.active {
-  background:rgba(0,0,0,0.75);
+  background:color-dark-hover($color-accent-dark);
   order: -1;
 }
 #omp-nav-toggle:checked + .omp-nav-items > .omp-nav-item:last-child {
   margin-bottom: $margin;
 }
 
-
 #omp-nav-toggle {
   display: none;
 }
 #omp-nav-home, #omp-nav-toggle-label {
-  color: black;
+  color: $color-text-dark;
   text-align: center;
   cursor: pointer;
   display: inline-block;
@@ -68,11 +69,34 @@
   height: 28px;
   margin: $margin;
   margin-bottom: auto;
+  &:active {
+    background: color-dark-hover($color-accent-light);
+    color: color-light-hover($color-text-dark);
+    cursor: pointer;
+  }
+  @media (min-width: 768px) {
+    &:hover {
+      background: color-dark-hover($color-accent-light);
+      color: color-light-hover($color-text-dark);
+      cursor: pointer;
+    }
+  }
+}
+
+/* Remove mobile touch blue highlight */
+#omp-nav-home, #omp-nav-toggle-label, .omp-nav-item {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 @media (min-width: 768px) {
   .omp-nav-items {
-    flex-direction: row;
+    flex-flow: row;
   }
   .omp-nav-item {
     margin: $margin;
@@ -90,4 +114,3 @@
     display: none;
   }
 }
-

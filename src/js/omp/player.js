@@ -25,81 +25,95 @@ class Player {
     init(parent) {
         this.parent = parent;
 
-        if (this.self == null) {
-            if (this.type == "audio") {
-                this.self = $("<audio controls></audio>");
-            } else if (this.type == "video" ) {
-                this.self = $("<video controls></video>");
+        if (this.type == "audio") {
+            if (this.self == null) {
+                this.self = $("<audio></audio>");
+                this.self.source = $("<source></source>");
+                this.self.source.appendTo(this.self);
+
+                this.self.on("ended", function() {
+                    players[this.libkey].next();
+                });
             }
-            this.self.source = $("<source></source>");
-            this.self.source.appendTo(this.self);
 
             this.self.artist = $("<p>", {
+                text: ""
+            });
+            this.self.album = $("<p>", {
                 text: ""
             });
             this.self.title = $("<p>", {
                 text: ""
             });
-            this.self.nextBtn = $("<button>", {
-                id: "next",
-                click: function() {
-                    players[DATA.libkey].next();
-                },
-                text: "next"
-            });
-            this.self.prevBtn = $("<button>", {
-                id: "prev",
-                click: function() {
-                    players[DATA.libkey].prev();
-                },
-                text: "prev"
-            });
-            this.self.shuffleBtn = $("<button>", {
-                id: "shuffle",
-                click: function() {
-                    players[DATA.libkey].shuffle();
-                    console.log("player-" + DATA.libkey + " shuffle: " + players[DATA.libkey].isShuffle)
-                },
-                text: "shuffle"
-            });
-            this.self.linkBtn = $("<input>", {
-                type: "button",
-                onclick: "",
-                value: "direct link"
+
+            this.self.artist.prependTo($(".omp-player-content"));
+            this.self.album.prependTo($(".omp-player-content"));
+            this.self.title.prependTo($(".omp-player-details"));
+
+            /* Register callbacks on custom buttons */
+            var that = this;
+            $(".omp-player-buttons > i").each(function () {
+                if (this.className.match("play")) {
+                    that.self.playBtn = $(this);
+                    that.self.playBtn.on("click", function () {
+                        if (players[that.libkey].isPlaying) {
+                            players[that.libkey].pause();
+                        } else {
+                            players[that.libkey].play();
+                        }
+                    });
+                } else if (this.className.match("repeat")) {
+                    that.self.repeatBtn = $(this);
+                    that.self.repeatBtn.on("click", function () {
+                        players[that.libkey].repeat();
+                    });
+                } else if (this.className.match("random")) {
+                    that.self.randomBtn = $(this);
+                    that.self.randomBtn.on("click", function () {
+                        players[that.libkey].shuffle();
+                    });
+                } else if (this.className.match("backward")) {
+                    that.self.prevBtn = $(this);
+                    that.self.prevBtn.on("click", function () {
+                        players[that.libkey].prev();
+                    });
+                } else if (this.className.match("forward")) {
+                    that.self.nextBtn = $(this);
+                    that.self.nextBtn.on("click", function () {
+                        players[that.libkey].next();
+                    });
+                } else if (this.className.match("download")) {
+                    that.self.linkBtn = $(this);
+                }
             });
 
-            this.self.on("ended", function() {
-                players[DATA.libkey].next();
-            });
-        }
-
-        this.self.linkBtn.prependTo(this.parent);
-        this.self.shuffleBtn.prependTo(this.parent);
-        this.self.nextBtn.prependTo(this.parent);
-        this.self.prevBtn.prependTo(this.parent);
-        $("<br/>").prependTo(this.parent);
-        this.self.prependTo(this.parent);
-        this.self.title.prependTo(this.parent);
-        this.self.artist.prependTo(this.parent);
-
-        this.nowPlaying = [[0,DATA.library[DATA.libkey].f.files.length-1]];
-        if (this.current != null) {
+            this.nowPlaying = [[0,DATA.library[this.libkey].f.files.length-1]];
+            if (this.current == null) {
+                this.current = this.getRandomId();
+            }
             this.load(this.current);
-        }
 
+        } else {
+            console.log("Unsupported Player type!");
+        }
     };
 
     /*
      * Get an id ready to play
      */
     load(id) {
-        var index = DATA.library[DATA.libkey].f.lookup[id];
-        this.self.source.attr("src", DATA.APIBASE + "/stream/" + id);
-        this.self.source.attr("type", DATA.library[DATA.libkey].f.files[index].mimetype);
-        this.self.title.text(DATA.library[DATA.libkey].f.files[index].title);
-        this.self.artist.text(DATA.library[DATA.libkey].f.files[index].artist);
-        this.self.linkBtn.attr("onclick", "location.href='" + DATA.APIBASE + "/stream/" + id + "'");
-        this.self[0].load();
+        if (id) {
+            var index = DATA.library[this.libkey].f.lookup[id];
+            this.self.source.attr("src", DATA.APIBASE + "/stream/" + id);
+            this.self.source.attr("type", DATA.library[this.libkey].f.files[index].mimetype);
+            this.self.title.text(DATA.library[this.libkey].f.files[index].title);
+            this.self.artist.text(DATA.library[this.libkey].f.files[index].artist);
+            this.self.album.text(DATA.library[this.libkey].f.files[index].album);
+            this.self.linkBtn.on("click", function() {
+                location.href = DATA.APIBASE + "/stream/" + id;
+            });
+            this.self[0].load();
+        }
     };
 
     /*
@@ -112,15 +126,23 @@ class Player {
     play(id) {
         if (id != null) {
             this.isPlaying = true;
+            this.self.playBtn.removeClass("fa-play");
+            this.self.playBtn.addClass("fa-pause");
             this.load(id);
             this.current = id;
             this.self[0].play();
 
+        } else if (this.current) {
+            this.play(this.current);
+        } else {
+            this.next();
         }
     };
 
     pause() {
         this.isPlaying = false;
+        this.self.playBtn.removeClass("fa-pause");
+        this.self.playBtn.addClass("fa-play");
         if (this.self != null) {
             this.self[0].pause();
         }
@@ -128,6 +150,8 @@ class Player {
 
     stop() {
         this.isPlaying = false;
+        this.self.playBtn.removeClass("fa-pause");
+        this.self.playBtn.addClass("fa-play");
         if (this.self != null) {
             this.self[0].pause();
             this.self[0].load();
@@ -167,7 +191,7 @@ class Player {
                 if (this.current == null) {
                     index = this.nowPlaying[0][0];
                 } else {
-                    index = DATA.library[DATA.libkey].f.lookup[this.current];
+                    index = DATA.library[this.libkey].f.lookup[this.current];
 
                     for (var i=0; i<this.nowPlaying.length; i++) {
 
@@ -190,7 +214,7 @@ class Player {
                         }
                     }
                 }
-                id = DATA.library[DATA.libkey].f.files[index]._id;
+                id = DATA.library[this.libkey].f.files[index]._id;
             }
 
             this.playHistory.push(id);
@@ -236,7 +260,7 @@ class Player {
                 if (this.current == null) {
                     index = this.nowPlaying[0][0];
                 } else {
-                    index = DATA.library[DATA.libkey].f.lookup[this.current];
+                    index = DATA.library[this.libkey].f.lookup[this.current];
                     for (var i=0; i<this.nowPlaying.length; i++) {
 
                         // Found the correct sub-array
@@ -257,7 +281,7 @@ class Player {
                     }
                 }
 
-                id = DATA.library[DATA.libkey].f.files[index]._id;
+                id = DATA.library[this.libkey].f.files[index]._id;
             }
 
             this.playHistory.unshift(id);
@@ -303,7 +327,7 @@ class Player {
                 } else {
                     // calculate the correct id via the range offset
                     var index = r + this.nowPlaying[i][0];
-                    id = DATA.library[DATA.libkey].f.files[index]._id;
+                    id = DATA.library[this.libkey].f.files[index]._id;
                     break;
                 }
             }
@@ -327,9 +351,7 @@ class Player {
     };
 
     hide() {
-        if (this.self != null) {
-            this.self.hide();
-        }
+        this.stop();
         this.isPlaying = false;
     };
 }

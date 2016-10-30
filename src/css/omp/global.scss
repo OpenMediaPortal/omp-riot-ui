@@ -6,3 +6,17 @@
 /* ***** Configurable Variables ***** */
 $font-stack: 600 18px/28px "Open Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Sans-Serif;
 $margin: 0.20em;
+
+$color-primary: #605D66;
+$color-active: #111111;
+$color-accent-light: #9297A8;
+$color-accent-dark: #39373D;
+$color-text-light: #EEEEEE;
+$color-text-dark: #111111;
+
+@function color-light-hover ($color){
+  @return mix($color,white,90)
+}
+@function color-dark-hover ($color){
+  @return mix($color,black,75)
+}
